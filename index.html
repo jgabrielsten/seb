@@ -2,14 +2,17 @@
 <html lang="se">
 <head>
 <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Kalkylator för ränteöverbetalning</title>
 <style>
   body { font-family: Arial, sans-serif; background: #f8f9fa; margin: 0; padding: 20px; }
-  .container { max-width: 1200px; margin: auto; background: #fff; padding: 20px; border-radius: 8px; }
+  .container { max-width: 1200px; width: 100%; margin: auto; background: #fff; padding: 20px; border-radius: 8px; }
   h1 { font-size: 1.5em; }
   table { border-collapse: collapse; width: 70%; font-size: 14px; }
   th, td { border: 1px solid #ccc; padding: 6px; text-align: right; }
   th { background: #f1f1f1; }
+  .table-wrapper { overflow-x: auto; }
   .text-left { text-align: left; }
   .bg-red { background: #ffe5e5; }
   .bg-green { background: #e5ffe5; }
@@ -119,47 +122,47 @@
 	}
 
 
-  function renderTable(selected) {
-    const data = selected === '447' ? loan447Calc : loan455Calc;
-    let html = '<table><thead><tr>' +
-      '<th class="text-left">Datum</th>' +
-      '<th>Skuld (kr)</th>' +
-      '<th>SEB genomsnitt %</th>' +
-      '<th>Tillämpad %</th>' +
-      '<th>Skillnad %</th>' +
-      '<th>Överbetalning/mån</th>' +
-      '<th>Vid genomsnitt</th>' +
-      '<th>Faktiskt</th>' +
-      '</tr></thead><tbody>';
-    data.forEach(row => {
-      if (row.fixed) {
-        html += `<tr class="bg-fixed">` +
-          `<td class="text-left">${row.date}</td>` +
-          `<td>${row.debt.toLocaleString('sv-SE')}</td>` +
-          `<td>${row.sebAvg.toFixed(2)}%</td>` +
-          `<td>${row.applied.toFixed(2)}%</td>` +
-          `<td>-</td>` +
-          `<td>-</td>` +
-          `<td>${row.wouldHavePaid ? row.wouldHavePaid.toFixed(0) + ' kr' : '-'}</td>` +
-          `<td>${row.paid.toLocaleString('sv-SE')} kr</td>` +
-        '</tr>';
-        return;
-      }
-      const diffClass = row.difference > 0 ? 'bg-red' : 'bg-green';
-      html += `<tr class="${diffClass}">` +
+ function renderTable(selected) {
+  const data = selected === '447' ? loan447Calc : loan455Calc;
+  let html = '<div class="table-wrapper"><table><thead><tr>' +
+    '<th class="text-left">Datum</th>' +
+    '<th>Skuld (kr)</th>' +
+    '<th>SEB genomsnitt %</th>' +
+    '<th>Tillämpad %</th>' +
+    '<th>Skillnad %</th>' +
+    '<th>Överbetalning/mån</th>' +
+    '<th>Vid genomsnitt</th>' +
+    '<th>Faktiskt</th>' +
+    '</tr></thead><tbody>';
+  data.forEach(row => {
+    if (row.fixed) {
+      html += `<tr class="bg-fixed">` +
         `<td class="text-left">${row.date}</td>` +
         `<td>${row.debt.toLocaleString('sv-SE')}</td>` +
         `<td>${row.sebAvg.toFixed(2)}%</td>` +
         `<td>${row.applied.toFixed(2)}%</td>` +
-        `<td>${row.difference.toFixed(2)}%</td>` +
-        `<td>${row.monthlyOverpayment.toFixed(0)} kr</td>` +
-        `<td>${row.wouldHavePaid.toFixed(0)} kr</td>` +
+        `<td>-</td>` +
+        `<td>-</td>` +
+        `<td>${row.wouldHavePaid ? row.wouldHavePaid.toFixed(0) + ' kr' : '-'}</td>` +
         `<td>${row.paid.toLocaleString('sv-SE')} kr</td>` +
       '</tr>';
-    });
-    html += '</tbody></table>';
-    document.getElementById('tableContainer').innerHTML = html;
-  }
+      return;
+    }
+    const diffClass = row.difference > 0 ? 'bg-red' : 'bg-green';
+    html += `<tr class="${diffClass}">` +
+      `<td class="text-left">${row.date}</td>` +
+      `<td>${row.debt.toLocaleString('sv-SE')}</td>` +
+      `<td>${row.sebAvg.toFixed(2)}%</td>` +
+      `<td>${row.applied.toFixed(2)}%</td>` +
+      `<td>${row.difference.toFixed(2)}%</td>` +
+      `<td>${row.monthlyOverpayment.toFixed(0)} kr</td>` +
+      `<td>${row.wouldHavePaid.toFixed(0)} kr</td>` +
+      `<td>${row.paid.toLocaleString('sv-SE')} kr</td>` +
+    '</tr>';
+  });
+  html += '</tbody></table></div>';
+  document.getElementById('tableContainer').innerHTML = html;
+}
 
   document.getElementById('loanSelect').addEventListener('change', e => {
     renderTable(e.target.value);
