@@ -25,6 +25,21 @@
 </style>
 </head>
 <body>
-
+<div class="container">
+  <h1>Beräkning av ränteöverbetalning (2023–2025)</h1>
+  <div id="totals"></div>
+  <label>Välj lån:</label>
+  <select id="loanSelect">
+    <option value="447">Lån 37673447</option>
+    <option value="455">Lån 37673455</option>
+  </select>
+  <div class="legend"><br>Färgernas betydelse:
+    <span class="legend-item bg-red">Överbetalning</span>
+    <span class="legend-item bg-green">Underbetalning</span>
+    <span class="legend-item bg-fixed">Fast ränta</span>
+  </div>
+  <div id="tableContainer"></div><br>
+</div>
+<br>
 </body>
 </html>
